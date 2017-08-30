@@ -1,0 +1,2 @@
+-e git+https://github.com/TuxEatPi/common.git#egg=tuxeatpi-common
+PyYAML==3.12

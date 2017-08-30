@@ -1,0 +1,6 @@
+global:
+    language: "en_US"
+    nlu_engine: fake_nlu
+brain:
+fakecomponent:
+    arg1: value1

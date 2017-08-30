@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<project xmlns:nuance="https://developer.nuance.com/mix/nlu/trsx" xml:lang="en-US" nuance:version="2.0">
+  <ontology base="http://developer.nuance.com/mix/nlu/trsx/ontology-1.0">
+    <intents>
+      <intent name="brain__changelang">
+        <links>
+          <link conceptref="language"/>
+        </links>
+      </intent>
+    </intents>
+    <concepts>
+      <concept name="language"/>
+    </concepts>
+  </ontology>
+  <dictionaries>
+    <dictionary conceptref="language">
+      <entry literal="english" value="en_US"/>
+      <entry literal="french" value="fr_FR"/>
+    </dictionary>
+  </dictionaries>
+  <samples>
+    <sample intentref="brain__changelang">
+      Do you speak
+      <annotation conceptref="language">
+        french
+      </annotation>
+      ?
+    </sample>
+    <sample intentref="brain__changelang">
+      Do you understand
+      <annotation conceptref="language">
+        french
+      </annotation>
+      ?
+    </sample>
+    <sample intentref="brain__changelang">
+      Can you speak
+      <annotation conceptref="language">
+        french
+      </annotation>
+      ?
+    </sample>
+    <sample intentref="brain__changelang">
+      Do you know
+      <annotation conceptref="language">
+        french
+      </annotation>
+        ?
+    </sample>
+  </samples>
+</project>
