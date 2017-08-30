@@ -70,4 +70,4 @@ class Brain(TepBaseDaemon):
                 continue
             if state['state'] != "NOT ALIVE" and time.time() > state['date'] + 30:
                 self.registry.set_notalive(state)
-        time.sleep(3)
+        time.sleep(1)

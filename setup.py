@@ -40,7 +40,7 @@ setup(
     package_dir={'tuxeatpi_brain': 'tuxeatpi_brain'},
     entry_points={
         'console_scripts': [
-            'tepbrain = tuxeatpi_brain.common:cli'
+            'tep-brain = tuxeatpi_brain.common:cli'
         ]
     },
     include_package_data=True,
