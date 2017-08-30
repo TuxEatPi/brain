@@ -18,4 +18,4 @@ WORKDIR /workdir
 COPY dialogs /dialogs
 COPY intents /intents
 
-ENTRYPOINT ["tepbrain", "-w", "/workdir", "-I", "/intents", "-D", "/dialogs"]
+ENTRYPOINT ["tep-brain", "-w", "/workdir", "-I", "/intents", "-D", "/dialogs"]
