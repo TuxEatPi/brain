@@ -1,6 +1,22 @@
+# Workflow
+workflows:
+  version: 2
+  test__dockerhub:
+    jobs:
+      - test
+      - build_docker_latest:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+            tags:
+                only: /.*/
+# Tasks
 version: 2
 jobs:
-  build:
+  # Tests
+  test:
     docker:
       - image: circleci/python:3.6.1
       - image: eclipse-mosquitto:latest
@@ -48,3 +64,17 @@ jobs:
       # Useless for now waiting for update from circleCI UI
       - store_test_results:
           path: pytest/
+  # Trigger dockerhub
+  build_docker_latest:
+    docker:
+      - image: docker:17.05.0-ce-git
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Push to Docker Hub
+          command: |
+            docker build -t tuxeatpi/brain:latest -f Dockerfile .
+            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+            docker push tuxeatpi/brain:latest
