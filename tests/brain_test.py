@@ -44,7 +44,7 @@ class TestBrain(object):
         self.brain.changelang("fr_FR")
         assert self.brain.settings.language == "fr_FR"
 
-        data = self.brain.settings.etcd_sender.read("/config/fakecomponent")
+        data = self.brain.settings.etcd_wrapper.read("/config/fakecomponent")
         assert json.loads(data.value) == {"arg1": "value1"}
 
         # Fake component to simulate NOT ALIVE state
@@ -52,7 +52,7 @@ class TestBrain(object):
                 "version": "0.0",
                 "date": time.time(),
                 "state": "ALIVE"}
-        self.brain.registry.etcd_client.write("/registry/fakecomponent", json.dumps(data))
+        self.brain.registry.etcd_wrapper.write("/registry/fakecomponent", data)
         time.sleep(5)
         assert "fakecomponent" in self.brain._states
         assert self.brain._states.get('fakecomponent', {}).get('state') == "ALIVE"

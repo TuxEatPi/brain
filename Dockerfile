@@ -1,6 +1,6 @@
 FROM python:3.5-alpine
 
-RUN apk add --no-cache git gcc python-dev linux-headers     musl-dev
+RUN apk add --no-cache git gcc python-dev linux-headers musl-dev
 
 COPY requirements.txt /opt/requirements.txt
 COPY test_requirements.txt /opt/test_requirements.txt
