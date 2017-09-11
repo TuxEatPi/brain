@@ -45,15 +45,13 @@ class Brain(TepBaseDaemon):
             message = Message(topic=topic, data=data)
             self.publish(message)
             return
-        self.full_config['global']['language'] = language
-        # Prepare message and send message
-        dialog = self.get_dialog("loading_language")
-        data = {"arguments": {"text": dialog}}
-        topic = "speech/say"
-        message = Message(topic=topic, data=data)
-        self.publish(message)
         # Update global config
+        self.full_config['global']['language'] = language
+        self.logger.info("Changing language")
         self._initializer.update_global()
+        while self.settings.language != language:
+            self.logger.info("Waiting for changing language")
+            time.sleep(1)
         # Prepare message and send it with the new language
         dialog = self.get_dialog("loaded_language")
         data = {"arguments": {"text": dialog}}
