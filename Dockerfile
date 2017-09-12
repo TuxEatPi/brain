@@ -1,21 +1,17 @@
-FROM python:3.5-alpine
-
-RUN apk add --no-cache git gcc python-dev linux-headers musl-dev
-
-COPY requirements.txt /opt/requirements.txt
-COPY test_requirements.txt /opt/test_requirements.txt
-RUN pip install -r /opt/requirements.txt
-
-RUN mkdir /workdir
-
-COPY setup.py /opt/setup.py
-WORKDIR /opt
-COPY tuxeatpi_brain /opt/tuxeatpi_brain
-RUN python /opt/setup.py install
-
-WORKDIR /workdir
+FROM tuxeatpi/common
 
 COPY dialogs /dialogs
 COPY intents /intents
 
-ENTRYPOINT ["tep-brain", "-w", "/workdir", "-I", "/intents", "-D", "/dialogs"]
+COPY test_requirements.txt /opt/test_requirements.txt
+COPY requirements.txt /opt/requirements.txt
+
+RUN sed -i 's/.*python-aio-etcd.*//' /opt/requirements.txt && \
+    sed -i 's/.*tuxeatpi-common.*//' /opt/requirements.txt && \
+    pip install -r /opt/requirements.txt
+
+COPY setup.py /opt/setup.py
+COPY tuxeatpi_brain /opt/tuxeatpi_brain
+RUN cd /opt && python /opt/setup.py install
+
+CMD ["brain", "-c", "/config.yaml"]
