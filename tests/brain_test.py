@@ -6,7 +6,8 @@ import pytest
 
 from tuxeatpi_brain.daemon import Brain
 from tuxeatpi_brain.error import BrainError
-from tuxeatpi_common.message import is_mqtt_topic, Message, MqttClient
+from tuxeatpi_common.message import Message
+#from tuxeatpi_common.wamp import is_wamp_topic, WampClient
 
 
 class TestBrain(object):
@@ -18,6 +19,7 @@ class TestBrain(object):
         dialogs = "dialogs"
         config_file = "tests/tests.yaml"
         self.brain = Brain("brain", workdir, intents, dialogs, config_file=config_file)
+        self.thread = threading.Thread(target=self.brain.start)
 
     @classmethod
     def teardown_class(self):
@@ -26,13 +28,12 @@ class TestBrain(object):
         self.brain.settings.delete()
         self.brain.registry.clear()
         self.brain.shutdown()
+        self.thread.join()
 
     @pytest.mark.order1
     def test_brain(self, capsys):
         # --help
-
-        t = threading.Thread(target=self.brain.start)
-        t = t.start()
+        self.thread.start()
 
         # Wait for start
         time.sleep(2)

@@ -3,7 +3,8 @@ import logging
 import time
 
 from tuxeatpi_common.daemon import TepBaseDaemon
-from tuxeatpi_common.message import Message, is_mqtt_topic
+from tuxeatpi_common.message import Message
+from tuxeatpi_common.wamp import is_wamp_topic, is_wamp_rpc
 
 from tuxeatpi_brain.initializer import BrainInitializer
 
@@ -25,7 +26,7 @@ class Brain(TepBaseDaemon):
         # Skip witing for config
         self._initializer = BrainInitializer(self, False, False, True)
 
-    @is_mqtt_topic("help")
+    @is_wamp_rpc("help")
     def help_(self):
         """Return help for this daemon"""
         pass
@@ -33,7 +34,8 @@ class Brain(TepBaseDaemon):
     def set_config(self, config):
         pass
 
-    @is_mqtt_topic("changelang")
+    @is_wamp_rpc("changelang")
+    @is_wamp_topic("changelang")
     def changelang(self, language):
         """Change the language for all components"""
         if language == self.settings.language:
