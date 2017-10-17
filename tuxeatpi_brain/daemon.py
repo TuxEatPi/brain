@@ -3,7 +3,6 @@ import logging
 import time
 
 from tuxeatpi_common.daemon import TepBaseDaemon
-from tuxeatpi_common.message import Message
 from tuxeatpi_common.wamp import is_wamp_topic, is_wamp_rpc
 
 from tuxeatpi_brain.initializer import BrainInitializer
@@ -42,10 +41,7 @@ class Brain(TepBaseDaemon):
             # No change
             # Prepare message and send message
             dialog = self.get_dialog("no_language_change")
-            data = {"arguments": {"text": dialog}}
-            topic = "speech/say"
-            message = Message(topic=topic, data=data)
-            self.publish(message)
+            self.call("speech.say", dialog)
             return
         # Update global config
         self.full_config['global']['language'] = language
@@ -56,10 +52,7 @@ class Brain(TepBaseDaemon):
             time.sleep(1)
         # Prepare message and send it with the new language
         dialog = self.get_dialog("loaded_language")
-        data = {"arguments": {"text": dialog}}
-        topic = "speech/say"
-        message = Message(topic=topic, data=data)
-        self.publish(message)
+        self.call("speech.say", dialog)
 
     def main_loop(self):
         """Main Loop"""
