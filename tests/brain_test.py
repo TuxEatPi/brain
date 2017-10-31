@@ -7,7 +7,13 @@ import pytest
 from tuxeatpi_brain.daemon import Brain
 from tuxeatpi_brain.error import BrainError
 from tuxeatpi_common.message import Message
-#from tuxeatpi_common.wamp import is_wamp_topic, WampClient
+from wampy.peers.clients import Client
+
+
+class FakeWampClient(Client):
+
+    def fake_say(self, text):
+        return
 
 
 class TestBrain(object):
@@ -21,6 +27,11 @@ class TestBrain(object):
         self.brain = Brain("brain", workdir, intents, dialogs, config_file=config_file)
         self.thread = threading.Thread(target=self.brain.start)
 
+        self.wclient = FakeWampClient(realm="tuxeatpi")
+        self.wclient.start()
+        self.wclient.session._register_procedure("speech.say")
+        setattr(self.wclient, "speech.say", self.wclient.fake_say)
+
     @classmethod
     def teardown_class(self):
         self.brain.settings.delete("/config/global")
@@ -29,6 +40,7 @@ class TestBrain(object):
         self.brain.registry.clear()
         self.brain.shutdown()
         self.thread.join()
+        self.wclient.stop()
 
     @pytest.mark.order1
     def test_brain(self, capsys):
@@ -40,7 +52,9 @@ class TestBrain(object):
 
         assert self.brain.settings.language == "en_US"
         self.brain.changelang("fr_FR")
+
         time.sleep(1)
+
         assert self.brain.settings.language == "fr_FR"
         self.brain.changelang("fr_FR")
         assert self.brain.settings.language == "fr_FR"

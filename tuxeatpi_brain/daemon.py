@@ -47,9 +47,11 @@ class Brain(TepBaseDaemon):
         self.full_config['global']['language'] = language
         self.logger.info("Changing language")
         self._initializer.update_global()
-        while self.settings.language != language:
+        while self.settings.language != language and self._run_main_loop:
             self.logger.info("Waiting for changing language")
             time.sleep(1)
+        if not self._run_main_loop:
+            return
         # Prepare message and send it with the new language
         dialog = self.get_dialog("loaded_language")
         self.call("speech.say", dialog)
