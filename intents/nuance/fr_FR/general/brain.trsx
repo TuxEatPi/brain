@@ -38,6 +38,12 @@
       </annotation>
     </sample>
     <sample intentref="brain__changelang">
+      Peux-tu parler en
+      <annotation conceptref="language">
+        anglais
+      </annotation>
+    </sample>
+    <sample intentref="brain__changelang">
       Sais tu parler
       <annotation conceptref="language">
         anglais
